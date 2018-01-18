@@ -2,7 +2,7 @@
 import logging
 
 
-class Logger:
+class Frustum:
 
     verbosities = ['critical', 'error', 'warning', 'info', 'debug']
     events = {
