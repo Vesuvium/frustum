@@ -5,13 +5,12 @@ import logging
 class Frustum:
 
     verbosities = ['critical', 'error', 'warning', 'info', 'debug']
-    events = {
-    }
 
     def __init__(self, *args, verbosity=0, output='stdout'):
         level = self._level_from_verbosity(verbosity)
         self.start_logger(level)
         self.add_handler(level, output)
+        self.events = {}
 
     def _level_from_verbosity(self, verbosity):
         if verbosity >= len(self.verbosities):
@@ -29,6 +28,12 @@ class Frustum:
             handler = logging.FileHandler(output)
             handler.setLevel(level)
             self.logger.addHandler(handler)
+
+    def register_event(self, event_name, event_level, message):
+        """
+        Registers an event so that it can be logged later.
+        """
+        self.events[event_name] = (event_level, message)
 
     def log(self, event, *args):
         message = event

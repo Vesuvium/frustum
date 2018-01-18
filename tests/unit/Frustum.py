@@ -22,6 +22,7 @@ def test_init(frustum_mock):
     frustum = Frustum()
     frustum.start_logger.assert_called_with(50)
     frustum.add_handler.assert_called_with(50, 'stdout')
+    assert frustum.events == {}
 
 
 @mark.parametrize('verbosity, level', [
@@ -59,6 +60,12 @@ def test_add_handler(mocker):
     logging.FileHandler().setLevel.assert_called_with(logging.CRITICAL)
     logging.getLogger().addHandler.assert_called_with(logging.FileHandler())
     assert isinstance(frustum, Frustum)
+
+
+def test_frustum_register_event(frustum):
+    message = 'message: {} happened!'
+    frustum.register_event('event', 'level', message)
+    assert frustum.events['event'] == ('level', message)
 
 
 def test_log(frustum):
