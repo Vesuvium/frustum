@@ -21,6 +21,12 @@ class Frustum:
         logging.basicConfig(level=level)
         self.logger = logging.getLogger(name)
 
+    def set_logger(self, logger_name, level):
+        """
+        Sets the level of a third party logger
+        """
+        logging.getLogger(logger_name).setLevel(level)
+
     def add_handler(self, level, output):
         if output != 'stdout':
             handler = logging.FileHandler(output)

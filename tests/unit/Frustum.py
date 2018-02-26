@@ -58,6 +58,11 @@ def test_start_logger(mocker, frustum):
     assert frustum.logger == logging.getLogger('name')
 
 
+def test_frustum_set_logger(mocker, frustum):
+    frustum.set_logger('third_party', 20)
+    assert logging.getLogger('third_party').level == 20
+
+
 def test_frustum_add_handler(frustum):
     frustum.add_handler(1, 'stdout')
 
