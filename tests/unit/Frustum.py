@@ -68,19 +68,28 @@ def test_frustum_add_handler_else(mocker):
     frustum.logger.addHandler.assert_called_with(logging.FileHandler())
 
 
-def test_frustum_register_event(frustum):
+def test_frustum_register_event(mocker):
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.events = {}
     message = 'message: {} happened!'
     frustum.register_event('event', 'level', message)
     assert frustum.events['event'] == ('level', message)
 
 
-def test_log(frustum):
+def test_frustum_log(mocker):
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.logger = mocker.MagicMock()
     frustum.events = {'my-event': ('info', 'hello {}')}
     frustum.log('my-event', 'world')
     frustum.logger.log.assert_called_with(logging.INFO, 'hello world')
 
 
-def test_log_custom_event(frustum):
+def test_frustum_log_custom_event(mocker):
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.logger = mocker.MagicMock()
     frustum.events = {}
     frustum.log('my-event', 'world')
     frustum.logger.log.assert_called_with(logging.INFO, 'my-event')
