@@ -14,11 +14,14 @@ def frustum_mock(mocker):
 
 @fixture
 def frustum(mocker):
-    mocker.patch.object(logging, 'getLogger')
-    return Frustum()
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.logger = mocker.MagicMock()
+    frustum.events = {}
+    return frustum
 
 
-def test_init(frustum_mock):
+def test_frustum_init(frustum_mock):
     frustum = Frustum()
     frustum.start_logger.assert_called_with('frustum', 50)
     frustum.add_handler.assert_called_with(50, 'stdout')
@@ -33,63 +36,46 @@ def test_init(frustum_mock):
     (4, logging.DEBUG),
     (5, logging.DEBUG)
 ])
-def test_init_verbosities(frustum_mock, verbosity, level):
+def test_frustum_init_verbosities(frustum_mock, verbosity, level):
     frustum = Frustum(verbosity=verbosity)
     frustum.start_logger.assert_called_with('frustum', level)
     frustum.add_handler.assert_called_with(level, 'stdout')
 
 
-def test_logger_output(frustum_mock):
+def test_frustum_init_output(frustum_mock):
     frustum = Frustum(output='mylog')
     frustum.add_handler.assert_called_with(50, 'mylog')
 
 
-def test_start_logger(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
+def test_start_logger(frustum):
     frustum.start_logger('name', 1)
     assert frustum.logger == logging.getLogger('name')
 
 
-def test_frustum_add_handler(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
+def test_frustum_add_handler(frustum):
     frustum.add_handler(1, 'stdout')
 
 
-def test_frustum_add_handler_else(mocker):
+def test_frustum_add_handler_else(mocker, frustum):
     mocker.patch.object(logging, 'FileHandler')
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
-    frustum.logger = mocker.MagicMock()
     frustum.add_handler(1, 'else')
     logging.FileHandler.assert_called_with('else')
     logging.FileHandler().setLevel.assert_called_with(1)
     frustum.logger.addHandler.assert_called_with(logging.FileHandler())
 
 
-def test_frustum_register_event(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
-    frustum.events = {}
+def test_frustum_register_event(frustum):
     message = 'message: {} happened!'
     frustum.register_event('event', 'level', message)
     assert frustum.events['event'] == ('level', message)
 
 
-def test_frustum_log(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
-    frustum.logger = mocker.MagicMock()
+def test_frustum_log(frustum):
     frustum.events = {'my-event': ('info', 'hello {}')}
     frustum.log('my-event', 'world')
     frustum.logger.log.assert_called_with(logging.INFO, 'hello world')
 
 
-def test_frustum_log_custom_event(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
-    frustum.logger = mocker.MagicMock()
-    frustum.events = {}
+def test_frustum_log_custom_event(mocker, frustum):
     frustum.log('my-event', 'world')
     frustum.logger.log.assert_called_with(logging.INFO, 'my-event')
