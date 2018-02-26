@@ -51,14 +51,21 @@ def test_start_logger(mocker):
     assert frustum.logger == logging.getLogger('name')
 
 
-def test_add_handler(mocker):
+def test_frustum_add_handler(mocker):
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.add_handler(1, 'stdout')
+
+
+def test_frustum_add_handler_else(mocker):
     mocker.patch.object(logging, 'FileHandler')
-    mocker.patch.object(logging, 'getLogger')
-    frustum = Frustum(output='mylog')
-    logging.FileHandler.assert_called_with('mylog')
-    logging.FileHandler().setLevel.assert_called_with(logging.CRITICAL)
-    logging.getLogger().addHandler.assert_called_with(logging.FileHandler())
-    assert isinstance(frustum, Frustum)
+    mocker.patch.object(Frustum, '__init__', return_value=None)
+    frustum = Frustum()
+    frustum.logger = mocker.MagicMock()
+    frustum.add_handler(1, 'else')
+    logging.FileHandler.assert_called_with('else')
+    logging.FileHandler().setLevel.assert_called_with(1)
+    frustum.logger.addHandler.assert_called_with(logging.FileHandler())
 
 
 def test_frustum_register_event(frustum):
