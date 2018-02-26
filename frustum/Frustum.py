@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from logging import config
 
 
 class Frustum:
@@ -17,7 +18,19 @@ class Frustum:
         return getattr(logging, self.verbosities[verbosity].upper())
 
     def start_logger(self, name, level):
+        """
+        Starts the logger, enabling the root logger and the module-specific
+        logger.
+        If the root logger has been already started, basicConfig does nothing.
+        """
         logging.basicConfig(level=level)
+        dictionary = {
+            'version': 1,
+            'loggers': {
+            }
+        }
+        dictionary['loggers'][name] = {'level': level}
+        config.dictConfig(dictionary)
         self.logger = logging.getLogger(name)
 
     def set_logger(self, logger_name, level):

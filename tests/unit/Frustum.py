@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from logging import config
 
 from frustum import Frustum
 
@@ -51,8 +52,11 @@ def test_frustum_init_name(frustum_mock):
 def test_start_logger(mocker, frustum):
     mocker.patch.object(logging, 'Logger')
     mocker.patch.object(logging, 'basicConfig')
-    frustum.start_logger('name', 1)
-    logging.basicConfig.assert_called_with(level=1)
+    mocker.patch.object(config, 'dictConfig')
+    frustum.start_logger('name', 10)
+    logging.basicConfig.assert_called_with(level=10)
+    dictionary = {'version': 1, 'loggers': {'name': {'level': 10}}}
+    config.dictConfig.assert_called_with(dictionary)
     assert frustum.logger == logging.getLogger('name')
 
 
