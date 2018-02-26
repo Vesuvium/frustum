@@ -8,7 +8,7 @@ class Frustum:
 
     def __init__(self, *args, verbosity=0, output='stdout'):
         level = self._level_from_verbosity(verbosity)
-        self.start_logger(level)
+        self.start_logger('frustum', level)
         self.add_handler(level, output)
         self.events = {}
 
@@ -17,11 +17,9 @@ class Frustum:
             verbosity = len(self.verbosities) - 1
         return getattr(logging, self.verbosities[verbosity].upper())
 
-    def start_logger(self, level):
+    def start_logger(self, name, level):
         logging.basicConfig(level=level)
-        for key in logging.Logger.manager.loggerDict:
-            logging.getLogger(key).setLevel(logging.CRITICAL)
-        self.logger = logging.getLogger('frustum')
+        self.logger = logging.getLogger(name)
 
     def add_handler(self, level, output):
         if output != 'stdout':

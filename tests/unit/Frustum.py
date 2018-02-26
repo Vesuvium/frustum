@@ -20,7 +20,7 @@ def frustum(mocker):
 
 def test_init(frustum_mock):
     frustum = Frustum()
-    frustum.start_logger.assert_called_with(50)
+    frustum.start_logger.assert_called_with('frustum', 50)
     frustum.add_handler.assert_called_with(50, 'stdout')
     assert frustum.events == {}
 
@@ -35,7 +35,7 @@ def test_init(frustum_mock):
 ])
 def test_init_verbosities(frustum_mock, verbosity, level):
     frustum = Frustum(verbosity=verbosity)
-    frustum.start_logger.assert_called_with(level)
+    frustum.start_logger.assert_called_with('frustum', level)
     frustum.add_handler.assert_called_with(level, 'stdout')
 
 
@@ -45,11 +45,10 @@ def test_logger_output(frustum_mock):
 
 
 def test_start_logger(mocker):
-    mocker.patch.object(logging, 'getLogger')
+    mocker.patch.object(Frustum, '__init__', return_value=None)
     frustum = Frustum()
-    logging.getLogger.assert_called_with('frustum')
-    logging.getLogger().setLevel.assert_called_with(logging.CRITICAL)
-    assert frustum.logger == logging.getLogger()
+    frustum.start_logger('name', 1)
+    assert frustum.logger == logging.getLogger('name')
 
 
 def test_add_handler(mocker):
