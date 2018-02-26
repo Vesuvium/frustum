@@ -9,37 +9,16 @@ from pytest import fixture, mark
 
 @fixture
 def frustum(mocker):
-    mocker.patch.object(Frustum, '__init__', return_value=None)
-    frustum = Frustum()
+    frustum = Frustum('frustum', 'debug')
     frustum.logger = mocker.MagicMock()
-    frustum.events = {}
     return frustum
 
 
-def test_frustum_init():
-    frustum = Frustum()
+def test_frustum_init(frustum):
+    assert frustum.name == 'frustum'
+    assert frustum.level == 'debug'
     assert frustum.events == {}
     assert frustum.config == {}
-
-
-@mark.parametrize('verbosity, level', [
-    (0, logging.CRITICAL),
-    (1, logging.ERROR),
-    (2, logging.WARNING),
-    (3, logging.INFO),
-    (4, logging.DEBUG),
-    (5, logging.DEBUG)
-])
-def test_frustum_init_verbosities(verbosity, level):
-    frustum = Frustum(verbosity=verbosity)
-
-
-def test_frustum_init_output():
-    Frustum(output='mylog')
-
-
-def test_frustum_init_name():
-    frustum = Frustum(name='test')
 
 
 def test_start_logger(mocker, frustum):

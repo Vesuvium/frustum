@@ -5,9 +5,11 @@ from logging import config
 
 class Frustum:
 
-    verbosities = ['critical', 'error', 'warning', 'info', 'debug']
+    levels = ['critical', 'error', 'warning', 'info', 'debug']
 
-    def __init__(self, *args, verbosity=0, name='frustum', output='stdout'):
+    def __init__(self, name, level):
+        self.name = name
+        self.level = level
         self.config = {}
         self.events = {}
 
