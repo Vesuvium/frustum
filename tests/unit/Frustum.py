@@ -50,7 +50,9 @@ def test_frustum_init_name(frustum_mock):
 
 def test_start_logger(mocker, frustum):
     mocker.patch.object(logging, 'Logger')
+    mocker.patch.object(logging, 'basicConfig')
     frustum.start_logger('name', 1)
+    logging.basicConfig.assert_called_with(level=1)
     assert frustum.logger == logging.getLogger('name')
 
 
