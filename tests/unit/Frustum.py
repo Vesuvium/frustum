@@ -9,7 +9,6 @@ from pytest import fixture, mark
 @fixture
 def frustum_mock(mocker):
     mocker.patch.object(Frustum, 'start_logger')
-    mocker.patch.object(Frustum, 'add_handler')
 
 
 @fixture
@@ -24,7 +23,6 @@ def frustum(mocker):
 def test_frustum_init(frustum_mock):
     frustum = Frustum()
     frustum.start_logger.assert_called_with('frustum', 50)
-    frustum.add_handler.assert_called_with(50, 'stdout')
     assert frustum.events == {}
 
 
@@ -39,12 +37,10 @@ def test_frustum_init(frustum_mock):
 def test_frustum_init_verbosities(frustum_mock, verbosity, level):
     frustum = Frustum(verbosity=verbosity)
     frustum.start_logger.assert_called_with('frustum', level)
-    frustum.add_handler.assert_called_with(level, 'stdout')
 
 
 def test_frustum_init_output(frustum_mock):
-    frustum = Frustum(output='mylog')
-    frustum.add_handler.assert_called_with(50, 'mylog')
+    Frustum(output='mylog')
 
 
 def test_frustum_init_name(frustum_mock):
