@@ -47,7 +47,13 @@ def test_frustum_init_output(frustum_mock):
     frustum.add_handler.assert_called_with(50, 'mylog')
 
 
-def test_start_logger(frustum):
+def test_frustum_init_name(frustum_mock):
+    frustum = Frustum(name='test')
+    frustum.start_logger.assert_called_with('test', 50)
+
+
+def test_start_logger(mocker, frustum):
+    mocker.patch.object(logging, 'Logger')
     frustum.start_logger('name', 1)
     assert frustum.logger == logging.getLogger('name')
 

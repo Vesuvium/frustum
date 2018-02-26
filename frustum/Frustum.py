@@ -6,9 +6,9 @@ class Frustum:
 
     verbosities = ['critical', 'error', 'warning', 'info', 'debug']
 
-    def __init__(self, *args, verbosity=0, output='stdout'):
+    def __init__(self, *args, verbosity=0, name='frustum', output='stdout'):
         level = self._level_from_verbosity(verbosity)
-        self.start_logger('frustum', level)
+        self.start_logger(name, level)
         self.add_handler(level, output)
         self.events = {}
 
