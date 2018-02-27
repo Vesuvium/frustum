@@ -34,7 +34,7 @@ def test_start_logger(mocker, frustum):
 
 def test_frustum_set_logger(mocker, frustum):
     frustum.set_logger('third_party', 20)
-    assert logging.getLogger('third_party').level == 20
+    assert frustum.config['loggers']['third_party'] == {'level': 20}
 
 
 def test_frustum_add_handler(frustum):
@@ -61,6 +61,6 @@ def test_frustum_log(frustum):
     frustum.logger.log.assert_called_with(logging.INFO, 'hello world')
 
 
-def test_frustum_log_custom_event(mocker, frustum):
+def test_frustum_log_custom_event(frustum):
     frustum.log('my-event', 'world')
     frustum.logger.log.assert_called_with(logging.INFO, 'my-event')
