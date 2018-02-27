@@ -58,10 +58,16 @@ def test_frustum_set_logger(patch, frustum):
     assert frustum.config['loggers']['third_party'] == {'level': 10}
 
 
+def test_frustum_set_logger_handler(patch, frustum):
+    patch.object(frustum, 'real_level', return_value=10)
+    frustum.set_logger('module', 'debug', handler='console')
+    assert frustum.config['loggers']['module']['handlers'] == ['console']
+
+
 def test_frustum_add_handler(frustum):
     frustum.add_handler('console', 'stream')
     expected = {'class': 'logging.StreamHandler'}
-    assert frustum.config['handlers']['console'] == expected 
+    assert frustum.config['handlers']['console'] == expected
 
 
 def test_frustum_register_event(frustum):

@@ -35,7 +35,7 @@ class Frustum:
         config.dictConfig(self.config)
         self.logger = logging.getLogger(self.name)
 
-    def set_logger(self, logger_name, level):
+    def set_logger(self, logger_name, level, handler=None):
         """
         Sets the level of a logger
         """
@@ -43,6 +43,8 @@ class Frustum:
             self.config['loggers'] = {}
         real_level = self.real_level(level)
         self.config['loggers'][logger_name] = {'level': real_level}
+        if handler:
+            self.config['loggers'][logger_name]['handlers'] = [handler]
 
     def add_handler(self, handler_name, handler_type):
         handler_classes = {'stream': 'logging.StreamHandler'}
