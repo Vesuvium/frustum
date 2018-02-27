@@ -30,8 +30,9 @@ class Frustum:
         """
         Enables the root logger and configures extra loggers.
         """
-        logging.basicConfig(level=self.level)
-        self.set_logger(self.name, self.level)
+        level = self.real_level(self.level)
+        logging.basicConfig(level=level)
+        self.set_logger(self.name, level)
         config.dictConfig(self.config)
         self.logger = logging.getLogger(self.name)
 

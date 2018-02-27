@@ -44,9 +44,11 @@ def test_start_logger(patch, frustum):
     patch.object(logging, 'basicConfig')
     patch.object(config, 'dictConfig')
     patch.object(Frustum, 'set_logger')
+    patch.object(Frustum, 'real_level')
     frustum.start_logger()
-    logging.basicConfig.assert_called_with(level=frustum.level)
-    Frustum.set_logger.assert_called_with(frustum.name, frustum.level)
+    Frustum.real_level.assert_called_with(frustum.level)
+    logging.basicConfig.assert_called_with(level=frustum.real_level())
+    Frustum.set_logger.assert_called_with(frustum.name, frustum.real_level())
     config.dictConfig.assert_called_with(frustum.config)
     assert frustum.logger == logging.getLogger(frustum.name)
 
