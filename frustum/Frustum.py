@@ -13,17 +13,10 @@ class Frustum:
         self.events = {}
         self.config = {'version': 1}
 
-    def _number_to_level(self, number):
-        if number >= len(self.levels):
-            return self.levels[-1]
-        return self.levels[number]
-
     def real_level(self, level):
         """
-        Finds the real level from a numeric or string level
+        Finds the real level from a string level
         """
-        if type(level) is int:
-            level = self._number_to_level(level)
         return getattr(logging, level.upper())
 
     def start_logger(self):
@@ -32,7 +25,7 @@ class Frustum:
         """
         level = self.real_level(self.level)
         logging.basicConfig(level=level)
-        self.set_logger(self.name, level)
+        self.set_logger(self.name, self.level)
         config.dictConfig(self.config)
         self.logger = logging.getLogger(self.name)
 

@@ -32,14 +32,6 @@ def test_frustum_real_level(frustum, level, expected):
     assert frustum.real_level(level) == expected
 
 
-def test_frustum_real_level_number(frustum):
-    assert frustum.real_level(0) == logging.CRITICAL
-
-
-def test_frustum_real_level_number_threshold(frustum):
-    assert frustum.real_level(7) == logging.DEBUG
-
-
 def test_start_logger(patch, frustum):
     patch.object(logging, 'basicConfig')
     patch.object(config, 'dictConfig')
