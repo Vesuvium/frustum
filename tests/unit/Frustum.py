@@ -21,6 +21,25 @@ def test_frustum_init(frustum):
     assert frustum.config == {}
 
 
+@mark.parametrize('level, expected', [
+    ('critical', logging.CRITICAL),
+    ('error', logging.ERROR),
+    ('warning', logging.WARNING),
+    ('info', logging.INFO),
+    ('debug', logging.DEBUG),
+])
+def test_frustum_real_level(frustum, level, expected):
+    assert frustum.real_level(level) == expected
+
+
+def test_frustum_real_level_number(frustum):
+    assert frustum.real_level(0) == logging.CRITICAL
+
+
+def test_frustum_real_level_number_threshold(frustum):
+    assert frustum.real_level(7) == logging.DEBUG
+
+
 def test_start_logger(mocker, frustum):
     mocker.patch.object(logging, 'Logger')
     mocker.patch.object(logging, 'basicConfig')

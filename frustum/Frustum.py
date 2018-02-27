@@ -13,10 +13,18 @@ class Frustum:
         self.config = {}
         self.events = {}
 
-    def _level_from_verbosity(self, verbosity):
-        if verbosity >= len(self.verbosities):
-            verbosity = len(self.verbosities) - 1
-        return getattr(logging, self.verbosities[verbosity].upper())
+    def _number_to_level(self, number):
+        if number >= len(self.levels):
+            return self.levels[-1]
+        return self.levels[number]
+
+    def real_level(self, level):
+        """
+        Finds the real level from a numeric or string level
+        """
+        if type(level) is int:
+            level = self._number_to_level(level)
+        return getattr(logging, level.upper())
 
     def start_logger(self, name, level):
         """
