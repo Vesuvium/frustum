@@ -35,6 +35,11 @@ class Frustum:
         config.dictConfig(self.config)
         self.logger = logging.getLogger(self.name)
 
+    def set_formatter(self, formatter_name, string_format):
+        if 'formatters' not in self.config:
+            self.config['formatters'] = {}
+        self.config['formatters'][formatter_name] = {'format': string_format}
+
     def set_logger(self, logger_name, level, handler=None):
         """
         Sets the level of a logger
