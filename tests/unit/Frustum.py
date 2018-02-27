@@ -51,9 +51,11 @@ def test_start_logger(patch, frustum):
     assert frustum.logger == logging.getLogger(frustum.name)
 
 
-def test_frustum_set_logger(mocker, frustum):
-    frustum.set_logger('third_party', 20)
-    assert frustum.config['loggers']['third_party'] == {'level': 20}
+def test_frustum_set_logger(patch, frustum):
+    patch.object(frustum, 'real_level', return_value=10)
+    frustum.set_logger('third_party', 'debug')
+    frustum.real_level.assert_called_with('debug')
+    assert frustum.config['loggers']['third_party'] == {'level': 10}
 
 
 def test_frustum_add_handler(frustum):

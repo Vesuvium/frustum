@@ -37,11 +37,12 @@ class Frustum:
 
     def set_logger(self, logger_name, level):
         """
-        Sets the level of a third party logger
+        Sets the level of a logger
         """
         if 'loggers' not in self.config:
             self.config['loggers'] = {}
-        self.config['loggers'][logger_name] = {'level': level}
+        real_level = self.real_level(level)
+        self.config['loggers'][logger_name] = {'level': real_level}
 
     def add_handler(self, level, output):
         if output != 'stdout':
