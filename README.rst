@@ -12,11 +12,14 @@ Usage::
 
     from frustum import Frustum
 
-    # Initialize with verbosity from 1 to 5 (critical to info)
-    frustum = Frustum(verbosity=5, name='app')
+    # Initialize with logger name and level
+    frustum = Frustum('logger_name', 'debug')
 
     # Register all the events that you want within frustum
     frustum.register_event('setup', 'info', 'Frustum has been setup in {}')
+
+    # Start the logger
+    frustum.start_logger()
 
     # Now you can use the registered events in this way
     frustum.log('setup', 'readme')
