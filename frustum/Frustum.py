@@ -10,8 +10,8 @@ class Frustum:
     def __init__(self, name, level):
         self.name = name
         self.level = level
-        self.config = {}
         self.events = {}
+        self.config = {'version': 1}
 
     def _number_to_level(self, number):
         if number >= len(self.levels):
@@ -26,21 +26,14 @@ class Frustum:
             level = self._number_to_level(level)
         return getattr(logging, level.upper())
 
-    def start_logger(self, name, level):
+    def start_logger(self):
         """
-        Starts the logger, enabling the root logger and the module-specific
-        logger.
-        If the root logger has been already started, basicConfig does nothing.
+        Enables the root logger and configures extra loggers.
         """
-        logging.basicConfig(level=level)
-        dictionary = {
-            'version': 1,
-            'loggers': {
-            }
-        }
-        dictionary['loggers'][name] = {'level': level}
-        config.dictConfig(dictionary)
-        self.logger = logging.getLogger(name)
+        logging.basicConfig(level=self.level)
+        self.set_logger(self.name, self.level)
+        config.dictConfig(self.config)
+        self.logger = logging.getLogger(self.name)
 
     def set_logger(self, logger_name, level):
         """

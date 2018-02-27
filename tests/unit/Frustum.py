@@ -18,7 +18,7 @@ def test_frustum_init(frustum):
     assert frustum.name == 'frustum'
     assert frustum.level == 'debug'
     assert frustum.events == {}
-    assert frustum.config == {}
+    assert frustum.config == {'version': 1}
 
 
 @mark.parametrize('level, expected', [
@@ -40,15 +40,15 @@ def test_frustum_real_level_number_threshold(frustum):
     assert frustum.real_level(7) == logging.DEBUG
 
 
-def test_start_logger(mocker, frustum):
-    mocker.patch.object(logging, 'Logger')
-    mocker.patch.object(logging, 'basicConfig')
-    mocker.patch.object(config, 'dictConfig')
-    frustum.start_logger('name', 10)
-    logging.basicConfig.assert_called_with(level=10)
-    dictionary = {'version': 1, 'loggers': {'name': {'level': 10}}}
-    config.dictConfig.assert_called_with(dictionary)
-    assert frustum.logger == logging.getLogger('name')
+def test_start_logger(patch, frustum):
+    patch.object(logging, 'basicConfig')
+    patch.object(config, 'dictConfig')
+    patch.object(Frustum, 'set_logger')
+    frustum.start_logger()
+    logging.basicConfig.assert_called_with(level=frustum.level)
+    Frustum.set_logger.assert_called_with(frustum.name, frustum.level)
+    config.dictConfig.assert_called_with(frustum.config)
+    assert frustum.logger == logging.getLogger(frustum.name)
 
 
 def test_frustum_set_logger(mocker, frustum):
