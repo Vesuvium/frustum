@@ -44,11 +44,12 @@ class Frustum:
         real_level = self.real_level(level)
         self.config['loggers'][logger_name] = {'level': real_level}
 
-    def add_handler(self, level, output):
-        if output != 'stdout':
-            handler = logging.FileHandler(output)
-            handler.setLevel(level)
-            self.logger.addHandler(handler)
+    def add_handler(self, handler_name, handler_type):
+        handler_classes = {'stream': 'logging.StreamHandler'}
+        handler_class = handler_classes[handler_type]
+        if 'handlers' not in self.config:
+            self.config['handlers'] = {}
+        self.config['handlers'][handler_name] = {'class': handler_class}
 
     def register_event(self, event_name, event_level, message):
         """

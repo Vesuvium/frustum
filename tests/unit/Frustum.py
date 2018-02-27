@@ -59,15 +59,9 @@ def test_frustum_set_logger(patch, frustum):
 
 
 def test_frustum_add_handler(frustum):
-    frustum.add_handler(1, 'stdout')
-
-
-def test_frustum_add_handler_else(mocker, frustum):
-    mocker.patch.object(logging, 'FileHandler')
-    frustum.add_handler(1, 'else')
-    logging.FileHandler.assert_called_with('else')
-    logging.FileHandler().setLevel.assert_called_with(1)
-    frustum.logger.addHandler.assert_called_with(logging.FileHandler())
+    frustum.add_handler('console', 'stream')
+    expected = {'class': 'logging.StreamHandler'}
+    assert frustum.config['handlers']['console'] == expected 
 
 
 def test_frustum_register_event(frustum):
