@@ -22,7 +22,7 @@ setup(
     author='Jacopo Cascioli',
     author_email='jacopocascioli@gmail.com',
     license='MIT',
-    version='0.0.4',
+    version='0.0.5',
     packages=find_packages(),
     tests_require=[
         'pytest',
