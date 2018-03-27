@@ -25,7 +25,7 @@ class Frustum:
         """
         level = self.real_level(self.level)
         logging.basicConfig(level=level)
-        self.set_logger(self.name, level)
+        self.set_logger(self.name, self.level)
         config.dictConfig(self.config)
         self.logger = logging.getLogger(self.name)
 
