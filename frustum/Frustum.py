@@ -59,9 +59,12 @@ class Frustum:
         self.events[event_name] = (event_level, message)
 
     def log(self, event, *args):
-        message = event
-        level = logging.INFO
         if event in self.events:
             level = getattr(logging, self.events[event][0].upper())
             message = self.events[event][1]
+            self.logger.log(level, message.format(*args))
+            return None
+        args = list(args)
+        level = self.real_level(event)
+        message = args.pop(0)
         self.logger.log(level, message.format(*args))

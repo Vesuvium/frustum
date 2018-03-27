@@ -81,6 +81,8 @@ def test_frustum_log(frustum):
     frustum.logger.log.assert_called_with(logging.INFO, 'hello world')
 
 
-def test_frustum_log_custom_event(frustum):
-    frustum.log('my-event', 'world')
-    frustum.logger.log.assert_called_with(logging.INFO, 'my-event')
+def test_frustum_log_custom_event(patch, frustum):
+    patch.object(Frustum, 'real_level', return_value='level')
+    frustum.log('level', 'message in {}', 'my log')
+    Frustum.real_level.assert_called_with('level')
+    frustum.logger.log.assert_called_with('level', 'message in my log')
