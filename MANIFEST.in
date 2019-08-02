@@ -1,0 +1,4 @@
+include LICENSE
+include pytest.ini
+include tox.ini
+recursive-include tests *.py
