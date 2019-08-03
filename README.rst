@@ -4,6 +4,8 @@ Frustum
 (Almost) out-of-the box logging. Frustum is a wrapper around the standard's
 library logging, so you don't have to write the same boilerplate again.
 
+Frustum is no longer mantained, since https://github.com/Delgan/loguru does much better.
+
 Install::
 
     pip install frustum
